@@ -39,6 +39,7 @@ yarn-error.log
 testem.log
 /typings
 __screenshots__/
+/playwright-report/
 
 # System files
 .DS_Store
