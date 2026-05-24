@@ -96,13 +96,27 @@
   - Create `src/app/application/` with `stores/`, `features/`
   - Create `src/app/infrastructure/` with `repositories/`, `data-sources/`
   - Create `src/app/presentation/` with `pages/`, `components/`, `layouts/`
-- [ ] T026 [P] Move existing `src/app/app.component.ts` and `src/app/app.routes.ts` to `src/app/presentation/` or keep at root per convention
+- [ ] T026 Move `src/app/app.component.ts`, `src/app/app.config.ts`, and `src/app/app.routes.ts` into `src/app/presentation/` and update imports in `main.ts` and `main.server.ts`
 - [ ] T027 [P] Create a sample NgRx SignalStore in `src/app/application/stores/` to verify the setup works
 - [ ] T028 [P] Add a Playwright E2E test in `e2e/default-page.e2e-spec.ts` that navigates to `http://localhost:4200` and verifies the welcome page
 - [ ] T029 [P] Verify `src/app/app.component.ts` uses `input()` and `output()` functions instead of decorators
 - [ ] T030 [P] Verify `inject()` is used instead of constructor injection in generated services
 - [ ] T031 Run all validation steps from `quickstart.md` (serve, build, test, SSR)
 - [ ] T032 Run `speckit.git.commit` to save all changes
+
+---
+
+## Phase 6: Compliance & Verification
+
+**Purpose**: Address constitution-mandated verification gaps: accessibility, Playwright MCP manual testing, SSR HTML validation, and service convention checks
+
+- [ ] T033 [P] Configure AXE accessibility testing: install `@axe-core/playwright` and create accessibility audit test in `e2e/accessibility.e2e-spec.ts` that runs AXE checks on the default page
+- [ ] T034 Run manual Playwright MCP browser verification: use Playwright MCP tools to navigate to `http://localhost:4200`, take a snapshot, and verify the welcome page renders correctly (per constitution Development Workflow §5)
+- [ ] T035 [P] Start SSR server (`npm run serve:ssr:opencode_angular` or equivalent), run `curl http://localhost:4000` and verify HTML response contains rendered Angular content (not an empty shell)
+- [ ] T036 [P] Verify all generated services use `providedIn: 'root'` pattern (not per-component providers unless intentional)
+- [ ] T037 [P] Verify Tailwind utility classes render correctly: add a test component with a Tailwind class (e.g., `text-red-500`) and confirm the style applies in the browser
+- [ ] T038 Run full validation: `ng test` with coverage thresholds, `ng build`, SSR build, AXE audit, and E2E test — all must pass
+- [ ] T039 Run `speckit.git.commit` to save compliance verification changes
 
 ---
 
@@ -115,6 +129,7 @@
 - **User Story 1 (Phase 3)**: Depends on Foundational phase — the scaffold IS the user story
 - **User Story 2 (Phase 4)**: Depends on US1 completion — can only verify a project that exists
 - **Polish (Phase 5)**: Depends on all user stories being complete
+- **Compliance (Phase 6)**: Depends on Phase 5 completion — verifies constitution compliance
 
 ### User Story Dependencies
 
@@ -128,6 +143,7 @@
 - US1 tasks T006–T009 are parallel verifications after T005 scaffold
 - US2 tasks T013–T018 are parallel verifications
 - Phase 5 tasks T023–T030 can run in parallel after US2
+- Phase 6 tasks T033–T038 can run in parallel after Phase 5
 
 ### Parallel Opportunities
 
@@ -135,6 +151,7 @@
 - All US1 verification tasks (T006–T009) can run in parallel
 - All US2 verification tasks (T013–T018) can run in parallel
 - All Polish tasks (T023–T030) can run in parallel
+- All Compliance tasks (T033, T035–T037) can run in parallel; T034 (Playwright MCP) is sequential as it requires interactive browser verification
 
 ---
 
@@ -166,7 +183,8 @@ Task: "Verify standalone components (no NgModule imports in app.component.ts)"
 2. Complete US1 → Project scaffolded and running (MVP!)
 3. Complete US2 → All conventions verified
 4. Complete Polish → Clean Architecture + coverage + E2E ready
-5. Each phase adds value without breaking previous work
+5. Complete Compliance → Accessibility + SSR validation + Playwright MCP verified
+6. Each phase adds value without breaking previous work
 
 ---
 

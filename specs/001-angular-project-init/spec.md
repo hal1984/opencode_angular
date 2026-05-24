@@ -160,6 +160,8 @@ to confirm the testing configuration works.
   `ng add tailwindcss` or `--style=tailwind` flag.
 - Angular SSR packages (`@angular/ssr`) — installed and configured via the
   `--ssr` flag.
+- NgRx SignalStore (`@ngrx/signals`) — installed post-scaffold for state
+  management per Clean Architecture convention.
 - Node.js and npm — required by Angular CLI to download dependencies and
   compile.
 - The `angular-new-app` skill MUST be loaded before executing scaffolding
