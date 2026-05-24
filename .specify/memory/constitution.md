@@ -1,11 +1,10 @@
 <!--
   Sync Impact Report
 
-  Version change: 1.5.0 → 1.6.0 (MINOR: expanded VIII with concrete Angular best practices from MCP)
-  Modified principles:
-    - VIII. Angular CLI Best Practices — expanded with specific component,
-      template, signal, service, and accessibility rules from Angular MCP
-  Added sections: N/A
+  Version change: 1.6.0 → 1.7.0 (MINOR: added task-commit-issue lifecycle)
+  Modified principles: N/A
+  Added sections:
+    - Development Workflow — added steps 6-7: commit-per-task and issue closure
   Removed sections: N/A
   Templates requiring updates:
     - .specify/templates/plan-template.md — ✅ reviewed, no changes needed
@@ -262,6 +261,16 @@ All feature development MUST follow the Speckit SDD cycle:
    verification MUST be performed using the Playwright MCP tools
    (browser navigation, snapshots, screenshots) to validate the
    feature's critical user journeys against the running application.
+6. **Commit-per-task** — after completing each individual task from
+   `tasks.md`, run `/speckit.git.commit` to stage and commit the
+   changes. The commit message MUST reference the corresponding
+   GitHub issue number (e.g., `git commit -m "T005: scaffold project
+   (closes #5)"`).
+7. **Close GitHub issue** — after each task commit, close the
+   corresponding GitHub issue via the GitHub MCP
+   (`github_issue_write` with `method: "update"`, `state: "closed"`).
+   The issue body MUST be updated to include the commit SHA before
+   closing.
 
 Feature branches MUST be created via `speckit.git.feature`. Commits
 MUST be made with `speckit.git.commit` after each logical unit of work.
@@ -280,4 +289,4 @@ All pull requests and reviews MUST verify compliance with these principles.
 Violations MUST be documented in the Constitution Check section of
 `plan.md` with a written justification and rejected simpler alternative.
 
-**Version**: 1.6.0 | **Ratified**: 2026-05-24 | **Last Amended**: 2026-05-24
+**Version**: 1.7.0 | **Ratified**: 2026-05-24 | **Last Amended**: 2026-05-24
