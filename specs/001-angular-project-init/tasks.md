@@ -111,7 +111,7 @@
 **Purpose**: Address constitution-mandated verification gaps: accessibility, Playwright MCP manual testing, SSR HTML validation, and service convention checks
 
 - [X] T033 [P] Configure AXE accessibility testing: install `@axe-core/playwright` and create accessibility audit test in `e2e/accessibility.spec.ts` that runs AXE checks on the default page
-- [ ] T034 Run manual Playwright MCP browser verification: use Playwright MCP tools to navigate to `http://localhost:4200`, take a snapshot, and verify the welcome page renders correctly (per constitution Development Workflow §5)
+- [X] T034 Run manual Playwright MCP browser verification: use Playwright MCP tools to navigate to `http://localhost:4200`, take a snapshot, and verify the welcome page renders correctly (per constitution Development Workflow §5)
 - [X] T035 [P] Start SSR server, run `curl http://localhost:4000` and verify HTML response contains rendered Angular content (not an empty shell)
 - [X] T036 [P] Verify all generated services use `providedIn: 'root'` pattern (CounterStore confirmed)
 - [X] T037 [P] Verify Tailwind utility classes render correctly: Tailwind v4 configured via `@import 'tailwindcss'` in styles.css + `@tailwindcss/postcss`
