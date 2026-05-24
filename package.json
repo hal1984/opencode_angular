@@ -7,7 +7,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:opencode_angular": "node dist/opencode_angular/server/server.mjs"
+    "serve:ssr:opencode_angular": "node dist/opencode_angular/server/server.mjs",
+    "e2e": "npx playwright test"
   },
   "private": true,
   "packageManager": "npm@11.15.0",
@@ -29,6 +30,7 @@
     "@angular/build": "^21.2.12",
     "@angular/cli": "^21.2.12",
     "@angular/compiler-cli": "^21.2.0",
+    "@angular/language-server": "^21.2.14",
     "@axe-core/playwright": "^4.11.3",
     "@playwright/test": "^1.60.0",
     "@tailwindcss/postcss": "^4.1.12",

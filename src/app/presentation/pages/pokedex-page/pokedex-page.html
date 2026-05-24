@@ -1,0 +1,37 @@
+<h1>Pokedex</h1>
+
+@if (store.isLoading() && store.pokemon().length === 0) {
+  <p role="status">Loading Pokemon...</p>
+}
+
+@if (store.error()) {
+  <p role="alert">Could not load Pokemon. Please try again.</p>
+  <button type="button" (click)="store.loadPokemon()">Retry</button>
+}
+
+@if (store.pokemon().length > 0) {
+  <section class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    @for (mon of store.pokemon(); track mon.id) {
+      <app-pokemon-card [pokemon]="mon" />
+    }
+  </section>
+
+  @if (store.hasMore()) {
+    <button 
+      type="button" 
+      (click)="store.loadPokemon()"
+      [disabled]="store.isLoading()"
+      class="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
+    >
+      Load More
+    </button>
+  }
+
+  @if (store.allLoaded()) {
+    <p class="mt-4 text-gray-600">All Pokemon loaded.</p>
+  }
+}
+
+@if (store.isEmpty()) {
+  <p>No Pokemon available.</p>
+}
