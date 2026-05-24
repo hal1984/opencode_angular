@@ -4,6 +4,20 @@
   "skills": {
     "paths": [".agents/skills"]
   },
+  "lsp": {
+    "angular": {
+      "command": [
+        "node",
+        "./node_modules/@angular/language-server/bin/ngserver",
+        "--stdio",
+        "--tsProbeLocations",
+        "./node_modules",
+        "--ngProbeLocations",
+        "./node_modules"
+      ],
+      "extensions": [".ts", ".html"]
+    }
+  },
   "mcp": {
     "github": {
       "type": "remote",
