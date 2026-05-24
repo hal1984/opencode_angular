@@ -28,6 +28,7 @@ Angular v21.2 app scaffolded with Clean Architecture layers in `src/app/`. Layer
 | `ng test` | Vitest unit tests (config: `vitest-base.config.ts`) |
 | `ng test -- --watch` | Vitest in watch mode |
 | `npx playwright test` | E2E tests (needs `ng serve` running on 4200) |
+| `npm run e2e` | Alias for `npx playwright test` |
 | `npx prettier --write .` | Format all files |
 
 ## Testing
