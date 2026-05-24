@@ -189,7 +189,7 @@ src/app/
     ├── pages/            # Route-level smart components
     ├── components/       # Shared UI components
     └── layouts/          # App shell, header, sidebar
-
+```
 ### VIII. Angular CLI Best Practices
 
 The Angular CLI best practices retrieved via the `angular-cli`
