@@ -26,9 +26,10 @@ in the browser at `http://localhost:4200`, displaying the default page.
 **Acceptance Scenarios**:
 
 1. **Given** the working directory with tooling configured, **When** the developer
-    runs the scaffolding command `ng new`, **Then** an Angular project is created
-    with standalone components, routing enabled, Tailwind CSS configured, and
-    SSR enabled.
+   runs the scaffolding command `ng new opencode_angular --directory=.`,
+   **Then** an Angular project is created in the current directory
+   with standalone components, routing enabled, Tailwind CSS configured, and
+   SSR enabled.
 
 2. **Given** the Angular project has been created, **When** the developer runs
    `ng serve`, **Then** the application compiles without errors and is served at
@@ -81,7 +82,8 @@ to confirm the testing configuration works.
 
 - **FR-001**: The system MUST create an Angular project using the official
   Angular CLI (`ng new`) with the `--standalone`, `--routing`,
-  `--style=tailwind`, and `--ssr` flags.
+  `--style=tailwind`, `--ssr`, and `--directory=.` flags, placing all
+  files in the current directory without creating a subfolder.
 - **FR-002**: The created project MUST use standalone components as the
   default architecture (no NgModules for components and directives).
 - **FR-003**: The project MUST have routing configured and functional from
