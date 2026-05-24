@@ -13,6 +13,21 @@
       <app-pokemon-card [pokemon]="mon" />
     }
   </section>
+
+  @if (store.hasMore()) {
+    <button 
+      type="button" 
+      (click)="store.loadPokemon()"
+      [disabled]="store.isLoading()"
+      class="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
+    >
+      Load More
+    </button>
+  }
+
+  @if (store.allLoaded()) {
+    <p class="mt-4 text-gray-600">All Pokemon loaded.</p>
+  }
 }
 
 @if (store.isEmpty()) {
