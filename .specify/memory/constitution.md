@@ -1,11 +1,9 @@
 <!--
   Sync Impact Report
 
-  Version change: 1.6.0 → 1.7.0 (MINOR: added task-commit-issue lifecycle)
-  Modified principles: N/A
-  Added sections:
-    - Development Workflow — added steps 6-7: commit-per-task and issue closure
-  Removed sections: N/A
+  Version change: 1.7.0 → 1.7.1 (PATCH: added test-screenshots convention to §5)
+  Modified sections:
+    - Development Workflow — step 5 now stores screenshots in /test-screenshots/
   Templates requiring updates:
     - .specify/templates/plan-template.md — ✅ reviewed, no changes needed
     - .specify/templates/spec-template.md — ✅ reviewed, no changes needed
@@ -261,6 +259,9 @@ All feature development MUST follow the Speckit SDD cycle:
    verification MUST be performed using the Playwright MCP tools
    (browser navigation, snapshots, screenshots) to validate the
    feature's critical user journeys against the running application.
+   Screenshots and snapshots taken during verification MUST be saved
+   to the `test-screenshots/` directory at the repository root. This
+   directory is excluded from version control via `.gitignore`.
 6. **Commit-per-task** — after completing each individual task from
    `tasks.md`, run `/speckit.git.commit` to stage and commit the
    changes. The commit message MUST reference the corresponding
@@ -289,4 +290,4 @@ All pull requests and reviews MUST verify compliance with these principles.
 Violations MUST be documented in the Constitution Check section of
 `plan.md` with a written justification and rejected simpler alternative.
 
-**Version**: 1.7.0 | **Ratified**: 2026-05-24 | **Last Amended**: 2026-05-24
+**Version**: 1.7.1 | **Ratified**: 2026-05-24 | **Last Amended**: 2026-05-24
