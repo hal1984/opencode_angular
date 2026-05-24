@@ -1,10 +1,11 @@
 <!--
   Sync Impact Report
 
-  Version change: 1.0.0 → 1.1.0 (PATCH→MINOR: new principle added)
-  Modified principles: N/A
-  Added sections:
-    - VI. Documentation Language (English) — new principle
+  Version change: 1.2.0 → 1.3.0 (MINOR: material expansion of Clean Architecture principle)
+  Modified principles:
+    - VII. Clean Architecture — expanded with NgRx SignalStore layer model,
+      directory convention, dependency rules, and layer-specific testing
+  Added sections: N/A
   Removed sections: N/A
   Templates requiring updates:
     - .specify/templates/plan-template.md — ✅ reviewed, no changes needed
@@ -47,10 +48,9 @@ detection for internal state flow.
 
 Tests MUST be written and observed to fail before implementation code is
 written. Every component, service, directive, and pipe MUST have at least
-one test covering its primary behavior. Angular TestBed with Jasmine or
-Jest (as determined by the project's `angular.json` unitTestFramework)
-MUST be used. Integration tests MUST be added for any feature involving
-HTTP, routing, or inter-component communication.
+one test covering its primary behavior. Vitest MUST be used as the
+testing framework. Integration tests MUST be added for any feature
+involving HTTP, routing, or inter-component communication.
 
 ### V. TypeScript Strict Mode
 
@@ -66,13 +66,138 @@ specifications, implementation plans, task lists, checklists, README,
 code comments, and commit messages. Non-English documentation and
 comments MUST NOT be committed to the repository.
 
+### VII. Clean Architecture with NgRx SignalStore
+
+Application code MUST follow Clean Architecture with NgRx SignalStore
+(`@ngrx/signals`) as the state management layer. Four strictly separated
+layers with unidirectional dependency flow inward:
+
+#### Domain layer (`src/app/domain/`)
+
+Core business logic with zero framework dependencies:
+
+- **Entities** — plain TypeScript classes/interfaces representing
+  business objects (e.g., `User`, `Product`, `Order`)
+- **Value objects** — immutable typed wrappers (e.g., `Email`,
+  `Money`, `Address`)
+- **Use cases / interactors** — function signatures or abstract classes
+  defining business operations (e.g., `CreateOrder`,
+  `GetProductCatalog`)
+- **Repository interfaces** — abstract contracts for data access
+  (e.g., `ProductRepository`, `UserRepository`)
+- MUST NOT import from Angular, NgRx, RxJS, or any framework library
+- MAY import TypeScript utility types only
+
+#### Application / State layer (`src/app/application/`)
+
+NgRx SignalStore implementations that wire domain to infrastructure:
+
+- **SignalStores** defined via `signalStore()` with features:
+  - `withState<T>()` — typed state initialization
+  - `withComputed()` — derived reactive values
+  - `withMethods()` — actions that call use cases and update state via
+    `patchState()`
+  - `withHooks()` — lifecycle callbacks (`onInit`, `onDestroy`)
+  - `withProps()` — group injected dependencies (services, loggers)
+- **Store features** — reusable `signalStoreFeature()` functions for
+  cross-cutting patterns (e.g., `withLoading`, `withPagination`)
+- Dependencies (services, use cases) are injected via `inject()`
+  inside feature factories
+- Stores implement use case interfaces defined in the Domain layer
+- Stores MUST NOT import from the Presentation layer
+- Store type exported alongside instance:
+  ```typescript
+  export const MyStore = signalStore(/* ... */);
+  export type MyStore = InstanceType<typeof MyStore>;
+  ```
+
+#### Infrastructure / Data layer (`src/app/infrastructure/`)
+
+Concrete implementations of domain contracts:
+
+- **Repository implementations** — classes that implement Domain
+  repository interfaces
+- **Data sources** — HTTP clients (`fetch` or `HttpClient`), local
+  storage adapters, WebSocket handlers
+- **DTO mapping** — transformation between API response shapes and
+  domain entities
+- Depends on Domain interfaces only (no circular dependencies)
+
+#### Presentation layer (`src/app/presentation/`)
+
+Angular components and UI:
+
+- Standalone components, pages, reusable UI primitives
+- Stores injected via `inject(MyStore)` or constructor injection
+  (`constructor(readonly store: MyStore)`)
+- Templates bind directly to store signals (no intermediate
+  observables or manual subscriptions)
+- Components delegate all business logic to stores; components handle
+  UI concerns only (DOM events, accessibility, styling)
+- Smart components (pages) inject stores; dumb/presentational
+  components receive data via `input()` signals
+
+#### Dependency direction
+
+```
+Presentation → Application → Infrastructure → Domain
+     ↑                                          |
+     └──────────────────── depends ─────────────┘
+                   (via interfaces)
+```
+
+Domain MUST NOT depend on any outer layer. Infrastructure implements
+Domain interfaces (dependency inversion). Presentation and Application
+never import from Infrastructure directly — they depend on Domain
+interfaces resolved via Angular DI.
+
+#### Testing by layer
+
+| Layer | Strategy | Tools |
+|-------|----------|-------|
+| Domain | Pure unit tests. No TestBed. | Vitest |
+| Application | Store tests via `TestBed.inject(Store)` | Vitest + Angular Testing |
+| Infrastructure | Mocked data sources. No live network. | Vitest |
+| Presentation | Component tests with mocked stores | Vitest + Angular Testing |
+
+#### Directory convention
+
+```
+src/app/
+├── domain/
+│   ├── models/           # Entities, value objects
+│   ├── use-cases/        # Use case interfaces/functions
+│   └── repositories/     # Repository interfaces
+├── application/
+│   ├── stores/           # SignalStores per feature
+│   └── features/         # Shared signalStoreFeature() functions
+├── infrastructure/
+│   ├── repositories/     # Repository implementations
+│   └── data-sources/     # HTTP, local storage adapters
+└── presentation/
+    ├── pages/            # Route-level smart components
+    ├── components/       # Shared UI components
+    └── layouts/          # App shell, header, sidebar
+
+### VIII. Angular CLI Best Practices
+
+The Angular CLI best practices retrieved via the `angular-cli`
+MCP server (`get_best_practices` and `find_examples` tools) MUST be
+consulted before writing or modifying application code. Angular CLI
+generators (`ng generate`) MUST be preferred over hand-crafted files.
+The repo's Angular version MUST be checked at plan time so version-
+specific best practices are followed.
+
 ## Technology Stack & Constraints
 
 - **Documentation Language**: English (all specs, plans, tasks, comments)
 - **Framework**: Angular (latest stable, installed via Angular CLI)
 - **Language**: TypeScript with strict mode enabled
 - **Styling**: SCSS (component-scoped styles)
-- **Architecture**: Standalone components, signals-first, routing
+- **State Management**: NgRx SignalStore (`@ngrx/signals`)
+- **Architecture**: Clean Architecture (Domain/Application/Infrastructure/
+  Presentation), standalone components, signals-first, routing
+- **Testing**: Vitest (via Angular builder integration)
 - **Project State**: Pre-scaffolding — no `src/` or root `package.json`
 - **CLI Tooling**: Angular CLI via local MCP server
 - **SDD Workflow**: Speckit — `specify → plan → tasks → implement`
@@ -107,4 +232,4 @@ All pull requests and reviews MUST verify compliance with these principles.
 Violations MUST be documented in the Constitution Check section of
 `plan.md` with a written justification and rejected simpler alternative.
 
-**Version**: 1.1.0 | **Ratified**: 2026-05-24 | **Last Amended**: 2026-05-24
+**Version**: 1.3.0 | **Ratified**: 2026-05-24 | **Last Amended**: 2026-05-24
