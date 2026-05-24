@@ -1,4 +1,4 @@
-# Specification Quality Checklist: Inicializar Proyecto Angular
+# Specification Quality Checklist: Initialize Angular Project
 
 **Purpose**: Validate specification completeness and quality before proceeding to planning
 **Created**: 2026-05-24
@@ -8,7 +8,7 @@
 
 - [X] No implementation details (languages, frameworks, APIs)
 - [X] Focused on user value and business needs
-- [ ] Written for non-technical stakeholders
+- [X] Written for non-technical stakeholders
 - [X] All mandatory sections completed
 
 ## Requirement Completeness
@@ -31,8 +31,7 @@
 
 ## Notes
 
-- Unchecked item "Written for non-technical stakeholders" — this spec unavoidably
-  mentions Angular CLI commands (`ng new`, `ng serve`, `ng build`, `ng test`) in
-  functional requirements because the feature is literally about initializing an
-  Angular project. These are the user-facing tools, not implementation details.
-  The success criteria remain technology-agnostic and user-focused.
+- Spec is written in English per constitution requirement (Principle VI).
+- Functional requirements mention Angular CLI commands because those are the
+  user-facing tools for this initialization feature — they are not
+  implementation details.

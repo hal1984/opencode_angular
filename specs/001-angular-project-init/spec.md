@@ -1,4 +1,4 @@
-# Feature Specification: Inicializar Proyecto Angular
+# Feature Specification: Initialize Angular Project
 
 **Feature Branch**: `001-angular-project-init`
 
@@ -10,122 +10,138 @@
 
 ## User Scenarios & Testing *(mandatory)*
 
-### User Story 1 - Inicializar proyecto Angular desde CLI (Priority: P1)
+### User Story 1 - Initialize Angular project via CLI (Priority: P1)
 
-El desarrollador quiere crear un proyecto Angular moderno en este directorio de trabajo
-usando las herramientas de línea de comandos de Angular. El proyecto debe seguir las
-convenciones modernas de Angular: componentes standalone, routing configurado y estilos SCSS.
+The developer wants to create a modern Angular project in this working directory
+using Angular's command-line tools. The project MUST follow modern Angular
+conventions: standalone components, configured routing, and SCSS styling.
 
-**Why this priority**: Es el punto de partida obligatorio. Sin esta inicializacion, no
-se puede continuar con ningun desarrollo de funcionalidades.
+**Why this priority**: This is the mandatory starting point. Without this
+initialization, no further feature development can proceed.
 
-**Independent Test**: Ejecutar `ng serve` y verificar que la aplicacion carga correctamente
-en el navegador en `http://localhost:4200` mostrando la pagina por defecto.
+**Independent Test**: Run `ng serve` and verify the application loads correctly
+in the browser at `http://localhost:4200`, displaying the default page.
 
 **Acceptance Scenarios**:
 
-1. **Given** el directorio de trabajo con tooling configurado, **When** el desarrollador
-   ejecuta el comando de scaffolding `ng new`, **Then** se crea un proyecto Angular con
-   componentes standalone, routing habilitado y estilos SCSS configurados.
+1. **Given** the working directory with tooling configured, **When** the developer
+   runs the scaffolding command `ng new`, **Then** an Angular project is created
+   with standalone components, routing enabled, and SCSS styles configured.
 
-2. **Given** el proyecto Angular ha sido creado, **When** el desarrollador ejecuta
-   `ng serve`, **Then** la aplicacion compila sin errores y se sirve en
+2. **Given** the Angular project has been created, **When** the developer runs
+   `ng serve`, **Then** the application compiles without errors and is served at
    `http://localhost:4200`.
 
-3. **Given** la aplicacion esta corriendo, **When** el desarrollador abre el navegador
-   en `http://localhost:4200`, **Then** se muestra la pagina de bienvenida por defecto
-   de Angular.
+3. **Given** the application is running, **When** the developer opens the browser
+   at `http://localhost:4200`, **Then** the default Angular welcome page is
+   displayed.
 
 ---
 
-### User Story 2 - Estructura base del proyecto (Priority: P2)
+### User Story 2 - Verify project base structure (Priority: P2)
 
-El desarrollador necesita verificar que la estructura generada sigue las convenciones
-establecidas: TypeScript en modo estricto, uso de signals para reactividad, y
-configuracion de testing funcional.
+The developer needs to verify that the generated structure follows the
+established conventions: TypeScript strict mode, signals-based reactivity
+patterns, and a working testing configuration.
 
-**Why this priority**: La estructura correcta es necesaria antes de comenzar a escribir
-codigo de aplicacion, pero puede verificarse despues del scaffolding inicial.
+**Why this priority**: The correct structure is necessary before writing any
+application code, but it can be verified after the initial scaffolding.
 
-**Independent Test**: Revisar `angular.json`, `tsconfig.json` y ejecutar `ng test`
-para confirmar que la configuracion de testing funciona.
+**Independent Test**: Review `angular.json`, `tsconfig.json` and run `ng test`
+to confirm the testing configuration works.
 
 **Acceptance Scenarios**:
 
-1. **Given** el proyecto ha sido creado, **When** el desarrollador revisa la configuracion
-   de TypeScript, **Then** el modo estricto (`strict: true`) esta habilitado.
+1. **Given** the project has been created, **When** the developer reviews the
+   TypeScript configuration, **Then** strict mode (`strict: true`) is enabled.
 
-2. **Given** el proyecto ha sido creado, **When** el desarrollador ejecuta `ng test`,
-   **Then** los tests por defecto se ejecutan y pasan sin errores.
+2. **Given** the project has been created, **When** the developer runs
+   `ng test`, **Then** the default tests execute and pass without errors.
 
-3. **Given** el proyecto ha sido creado, **When** el desarrollador ejecuta `ng build`,
-   **Then** el proyecto compila correctamente sin warnings ni errores.
+3. **Given** the project has been created, **When** the developer runs
+   `ng build`, **Then** the project compiles successfully without warnings or
+   errors.
 
 ---
 
 ### Edge Cases
 
-- Que ocurre si `@angular/cli` no esta instalado globalmente? La herramienta debe
-  detectarlo e indicar al usuario como instalarlo.
-- Que ocurre si ya existe un `package.json` o carpeta `src/` en el directorio? El
-  scaffolding debe alertar al usuario y evitar sobrescribir archivos existentes.
-- Que ocurre si el directorio no tiene permisos de escritura?
+- What happens if `@angular/cli` is not installed globally? The tooling MUST
+  detect this and guide the user on how to install it.
+- What happens if a `package.json` or `src/` directory already exists in the
+  working directory? The scaffolding MUST alert the user and avoid overwriting
+  existing files.
+- What happens if the directory has no write permissions?
 
 ## Requirements *(mandatory)*
 
 ### Functional Requirements
 
-- **FR-001**: El sistema DEBE crear un proyecto Angular usando el CLI oficial
-  de Angular (`ng new`) con los flags `--standalone`, `--routing` y `--style=scss`.
-- **FR-002**: El proyecto creado DEBE usar componentes standalone como arquitectura
-  por defecto (sin NgModules para componentes y directivas).
-- **FR-003**: El proyecto DEBE tener el enrutador configurado y funcional desde el
-  inicio.
-- **FR-004**: El proyecto DEBE usar SCSS como preprocesador de estilos por defecto.
-- **FR-005**: El proyecto DEBE incluir configuracion de testing funcional lista para
-  ejecutar (`ng test` funciona sin configuracion adicional).
-- **FR-006**: La configuracion de TypeScript DEBE habilitar el modo estricto
-  (`strict: true` en `tsconfig.json`).
-- **FR-007**: El proyecto DEBE poder compilarse (`ng build`) y servirse en modo
-  desarrollo (`ng serve`) sin errores.
+- **FR-001**: The system MUST create an Angular project using the official
+  Angular CLI (`ng new`) with the `--standalone`, `--routing`, and
+  `--style=scss` flags.
+- **FR-002**: The created project MUST use standalone components as the
+  default architecture (no NgModules for components and directives).
+- **FR-003**: The project MUST have routing configured and functional from
+  the start.
+- **FR-004**: The project MUST use SCSS as the default style preprocessor.
+- **FR-005**: The project MUST include a working test configuration ready
+  to run (`ng test` works without additional setup). Tests MUST use
+  Vitest as the testing framework.
+- **FR-006**: The TypeScript configuration MUST enable strict mode
+  (`strict: true` in `tsconfig.json`).
+- **FR-007**: The project MUST be able to compile (`ng build`) and serve
+  in development mode (`ng serve`) without errors.
 
 ### Key Entities
 
-- **Proyecto Angular**: La estructura raiz generada que contiene `angular.json`,
-  `package.json`, `tsconfig.json`, carpeta `src/` con el codigo fuente inicial.
-- **Componente App**: El componente raiz (`app.component.ts`) generado como standalone
-  que sirve como punto de entrada visual de la aplicacion.
-- **Configuracion de Rutas**: El archivo `app.routes.ts` que define el enrutamiento
-  inicial de la aplicacion.
+- **Angular Project**: The generated root structure containing `angular.json`,
+  `package.json`, `tsconfig.json`, and the `src/` folder with initial source
+  code.
+- **App Component**: The root component (`app.component.ts`) generated as
+  standalone, serving as the visual entry point of the application.
+- **Routes Configuration**: The `app.routes.ts` file defining the initial
+  application routing.
 
 ## Success Criteria *(mandatory)*
 
 ### Measurable Outcomes
 
-- **SC-001**: La aplicacion se inicia y se sirve en el navegador en menos de 30
-  segundos tras ejecutar `ng serve` por primera vez.
-- **SC-002**: El comando `ng build` completa la compilacion sin errores ni warnings.
-- **SC-003**: El comando `ng test` ejecuta los tests por defecto y todos pasan.
-- **SC-004**: La pagina de bienvenida por defecto de Angular se renderiza
-  correctamente en el navegador.
+- **SC-001**: The application starts and is served in the browser in under
+  30 seconds after running `ng serve` for the first time.
+- **SC-002**: The `ng build` command completes compilation without errors
+  or warnings.
+- **SC-003**: The `ng test` command runs the default tests and all pass.
+- **SC-004**: The default Angular welcome page renders correctly in the
+  browser.
 
 ## Assumptions
 
-- El desarrollador tiene Node.js y npm instalados en versiones compatibles con la
-  version mas reciente de Angular.
-- El directorio de trabajo tiene permisos de escritura y no contiene una aplicacion
-  Angular previa que pueda entrar en conflicto.
-- Se usa la version mas reciente estable de Angular CLI disponible en el momento
-  de ejecucion.
-- La configuracion de red local permite que el servidor de desarrollo se ejecute
-  en el puerto 4200.
-- El proyecto se nombra `opencode_angular` (nombre del repositorio/directorio raiz)
-  segun la configuracion existente.
+- The developer has Node.js and npm installed in versions compatible with
+  the latest Angular release.
+- The working directory has write permissions and does not contain a
+  previous Angular application that could conflict.
+- The latest stable version of Angular CLI available at the time of
+  execution is used.
+- The local network configuration allows the development server to run on
+  port 4200.
+- The project is named `opencode_angular` (matching the repository/root
+  directory name) as per the existing configuration.
+- Vitest is the chosen testing framework and replaces Angular CLI's default
+  Jasmine/Karma setup.
+
+## Clarifications
+
+### Session 2026-05-24
+
+- Q: Which testing framework should the project use? → A: Vitest
 
 ## Dependencies
 
-- Angular CLI (`@angular/cli`) — debe estar disponible via `npx` o instalado
-  globalmente.
-- Node.js y npm — requeridos por Angular CLI para descargar dependencias y compilar.
-- El skill `angular-new-app` debe cargarse antes de ejecutar el scaffolding para
-  seguir las guias de configuracion moderna de Angular.
+- Angular CLI (`@angular/cli`) — MUST be available via `npx` or installed
+  globally.
+- Vitest + Angular Vitest integration — required for unit and component testing.
+- Node.js and npm — required by Angular CLI to download dependencies and
+  compile.
+- The `angular-new-app` skill MUST be loaded before executing scaffolding
+  to follow modern Angular setup guidelines.
