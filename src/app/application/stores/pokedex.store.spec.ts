@@ -70,4 +70,76 @@ describe('PokedexStore', () => {
   it('should compute isEmpty correctly', () => {
     expect(store.isEmpty()).toBe(false);
   });
+
+  it('should append Pokemon on pagination instead of replacing', async () => {
+    const paginatedRepo: IPokemonRepository = {
+      getPokemonList: vi.fn()
+        .mockResolvedValueOnce({
+          pokemon: [{ id: 1, name: 'bulbasaur', spriteUrl: 'url' }],
+          count: 2,
+          next: 'https://pokeapi.co/api/v2/pokemon?offset=1&limit=1',
+          previous: null
+        } as PokemonListResponse)
+        .mockResolvedValueOnce({
+          pokemon: [{ id: 2, name: 'ivysaur', spriteUrl: 'url' }],
+          count: 2,
+          next: null,
+          previous: null
+        } as PokemonListResponse)
+    };
+
+    TestBed.resetTestingModule();
+    TestBed.configureTestingModule({
+      providers: [
+        { provide: POKEMON_REPOSITORY, useValue: paginatedRepo }
+      ]
+    });
+
+    const paginatedStore = TestBed.inject(PokedexStore);
+    await new Promise(resolve => setTimeout(resolve, 0));
+
+    expect(paginatedStore.pokemon()).toHaveLength(1);
+    expect(paginatedStore.hasMore()).toBe(true);
+
+    await paginatedStore.loadPokemon();
+
+    expect(paginatedStore.pokemon()).toHaveLength(2);
+    expect(paginatedStore.pokemon()[1].name).toBe('ivysaur');
+    expect(paginatedStore.hasMore()).toBe(false);
+  });
+
+  it('should compute allLoaded correctly', () => {
+    expect(store.allLoaded()).toBe(false);
+  });
+
+  it('should prevent concurrent loadPokemon calls', async () => {
+    const slowRepo: IPokemonRepository = {
+      getPokemonList: vi.fn().mockImplementation(() => 
+        new Promise(resolve => setTimeout(() => resolve({
+          pokemon: [{ id: 1, name: 'bulbasaur', spriteUrl: 'url' }],
+          count: 1,
+          next: null,
+          previous: null
+        }), 100))
+      )
+    };
+
+    TestBed.resetTestingModule();
+    TestBed.configureTestingModule({
+      providers: [
+        { provide: POKEMON_REPOSITORY, useValue: slowRepo }
+      ]
+    });
+
+    const slowStore = TestBed.inject(PokedexStore);
+    
+    // Call loadPokemon twice concurrently
+    const promise1 = slowStore.loadPokemon();
+    const promise2 = slowStore.loadPokemon();
+    
+    await Promise.all([promise1, promise2]);
+    
+    // Should only make one request
+    expect(slowRepo.getPokemonList).toHaveBeenCalledTimes(1);
+  });
 });
