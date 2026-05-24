@@ -1,9 +1,11 @@
 <!--
   Sync Impact Report
 
-  Version change: 1.7.0 → 1.7.1 (PATCH: added test-screenshots convention to §5)
+  Version change: 1.7.1 → 1.8.0 (MINOR: replaced Development Workflow with strict per-task execution cycle)
   Modified sections:
-    - Development Workflow — step 5 now stores screenshots in /test-screenshots/
+    - Development Workflow — replaced loose numbered steps with mandatory 5-step Per-Task Execution Cycle,
+      added Enforcement rules, added Cycle diagram, removed vague "logical unit of work" language
+  Removed sections: N/A
   Templates requiring updates:
     - .specify/templates/plan-template.md — ✅ reviewed, no changes needed
     - .specify/templates/spec-template.md — ✅ reviewed, no changes needed
@@ -250,33 +252,84 @@ enforced in all application code:
 
 ## Development Workflow
 
-All feature development MUST follow the Speckit SDD cycle:
+All feature development MUST follow the Speckit SDD cycle in this
+exact order:
 1. `speckit.specify` — write feature specification with user stories
 2. `speckit.plan` — create implementation plan with technical research
 3. `speckit.tasks` — break plan into sequenced, independently testable tasks
-4. `speckit.implement` — execute tasks in order (tests before code)
-5. **Manual Playwright MCP test** — after implementation, a manual
-   verification MUST be performed using the Playwright MCP tools
-   (browser navigation, snapshots, screenshots) to validate the
-   feature's critical user journeys against the running application.
-   Screenshots and snapshots taken during verification MUST be saved
-   to the `test-screenshots/` directory at the repository root. This
-   directory is excluded from version control via `.gitignore`.
-6. **Commit-per-task** — after completing each individual task from
-   `tasks.md`, run `/speckit.git.commit` to stage and commit the
-   changes. The commit message MUST reference the corresponding
-   GitHub issue number (e.g., `git commit -m "T005: scaffold project
-   (closes #5)"`).
-7. **Close GitHub issue** — after each task commit, close the
-   corresponding GitHub issue via the GitHub MCP
-   (`github_issue_write` with `method: "update"`, `state: "closed"`).
-   The issue body MUST be updated to include the commit SHA before
-   closing.
+4. `speckit.implement` — execute tasks in order
 
-Feature branches MUST be created via `speckit.git.feature`. Commits
-MUST be made with `speckit.git.commit` after each logical unit of work.
-`AGENTS.md` is the single source of agent guidance and MUST be updated
-whenever project conventions change.
+Feature branches MUST be created via `speckit.git.feature`.
+
+### Per-Task Execution Cycle (NON-NEGOTIABLE)
+
+For **EVERY** individual task in `tasks.md` (e.g. T001, T002, ... Txxx),
+the implementing agent MUST execute the following five steps in
+**EXACT order**:
+
+**Step 1 — Implement the task.** Do what the task description says.
+Write code, create files, run CLI commands. This step MUST produce the
+exact output described in the task.
+
+**Step 2 — Run automated tests for this task.** Run the relevant test
+suite (`ng test`, `npx playwright test`, etc.) and confirm ALL tests
+pass with zero failures. If the task adds no testable output, document
+why explicitly in the task notes.
+
+**Step 3 — Run manual Playwright MCP verification.** Use the Playwright
+MCP tools (`playwright_browser_navigate`, `playwright_browser_snapshot`,
+`playwright_browser_take_screenshot`) to verify the task's impact on
+the running application. Save all screenshots and snapshots to
+`test-screenshots/` — this directory is gitignored by `.gitignore`.
+If the task has no visible browser impact, skip this step but document
+the reason.
+
+**Step 4 — Commit the task.** Run `git add .` and
+`git commit -m "Txxx: <description> (closes #N)"` where `Txxx` is the
+task ID and `#N` is the corresponding GitHub issue number. ALWAYS
+include the closes clause. NEVER commit more than one task per commit.
+NEVER use "and", "also", or batch messages.
+
+**Step 5 — Close the GitHub issue.** Use `github_issue_write` with
+`method: "update"`, `state: "closed"`. BEFORE closing, update the
+issue body to include the commit SHA from Step 4. NEVER close an issue
+without including the SHA.
+
+### Enforcement
+
+- A task is COMPLETE only when all five steps above are done.
+- If any step is skipped, the task is NOT complete and the agent
+  MUST NOT proceed to the next task.
+- If automated tests fail (Step 2), the agent MUST NOT proceed to
+  Step 3 until the tests pass.
+- If the commit (Step 4) contains more than one task, the commit is
+  invalid — the agent MUST reset and recommit per-task.
+- If the issue (Step 5) is closed without the SHA, the issue closure
+  is invalid — the agent MUST reopen and fix.
+- The agent MUST NOT defer, bundle, batch, skip, or reorder any step.
+  There is no exception for "minor" tasks, "trivial" changes, or
+  "obvious" fixes.
+
+### Cycle diagram
+
+```
+Implement → [TASK COMPLETE]
+    │
+    ▼
+Run automated tests → fail → FIX → Re-run
+    │ pass
+    ▼
+Manual Playwright MCP test → skip (documented only)
+    │
+    ▼
+Commit (exactly one task)
+    │
+    ▼
+Close issue (with SHA)
+    │
+    ▼
+[Proceed to NEXT task]
+```
 
 ## Governance
 
@@ -290,4 +343,4 @@ All pull requests and reviews MUST verify compliance with these principles.
 Violations MUST be documented in the Constitution Check section of
 `plan.md` with a written justification and rejected simpler alternative.
 
-**Version**: 1.7.1 | **Ratified**: 2026-05-24 | **Last Amended**: 2026-05-24
+**Version**: 1.8.0 | **Ratified**: 2026-05-24 | **Last Amended**: 2026-05-24
