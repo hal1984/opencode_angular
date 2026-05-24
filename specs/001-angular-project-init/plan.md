@@ -61,8 +61,12 @@ specs/001-angular-project-init/
 ├── quickstart.md        # Phase 1 output
 ├── contracts/           # Phase 1 output (N/A - no external API)
 ├── checklists/
-│   └── requirements.md  # Spec quality checklist
-└── tasks.md             # Phase 2 output (/speckit.tasks)
+│   ├── architecture.md
+│   ├── requirements.md
+│   ├── workflow.md
+│   ├── scaffold.md
+│   └── testing.md
+└── tasks.md             # Phase 2 output (/speckit.tasks command)
 ```
 
 ### Source Code (repository root)
