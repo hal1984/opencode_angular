@@ -68,7 +68,7 @@ export class PokeapiDataSource implements IPokemonRepository {
 // Application layer — depends on the interface
 export const PokedexStore = signalStore(
   withProps(() => ({
-    repository: inject(IPokemonRepository) // resolved via DI token
+    repository: inject(POKEMON_REPOSITORY) // resolved via DI token
   })),
   withMethods(({ repository, ...store }) => ({
     async loadPokemon(): Promise<void> {

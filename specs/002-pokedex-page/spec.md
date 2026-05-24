@@ -6,7 +6,7 @@
 
 **Status**: Draft
 
-**Input**: User description: "cuando el usuario abra la app, quiero que vea un boton en la home que ponga 'Pokedex', al click que vaya a una página que sea un listado de pokemos sacados de una api pública."
+**Input**: User description: "When the user opens the app, I want them to see a button on the home page that says 'Pokedex', and when clicked, go to a page that lists Pokemon from a public API." (Translated from original Spanish)
 
 ## Clarifications
 
@@ -101,7 +101,7 @@ The Pokémon API contains hundreds of entries. The user can load additional Pok�
 
 - PokéAPI (pokeapi.co) is the data source; it is a free RESTful API requiring no authentication, providing Pokémon names, sprites, and IDs.
 - The application already has a home page and routing infrastructure in place.
-- Users have standard broadband internet connectivity.
+- Users have standard broadband internet connectivity (≥5 Mbps downstream; SC-002 timing thresholds assume this minimum).
 - The initial batch size is reasonable (20-30 Pokémon) for performance and user experience.
 - Mobile responsiveness is desirable but not a blocking requirement for the initial version.
 - Pokémon detail views (click to see stats, types, abilities) are out of scope; this feature provides a list-only experience.
