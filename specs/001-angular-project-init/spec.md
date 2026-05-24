@@ -150,6 +150,7 @@ to confirm the testing configuration works.
 - Q: Which testing framework should the project use? → A: Vitest
 - Q: Use Tailwind CSS instead of SCSS for styling? → A: Yes, use `--style=tailwind`
 - Q: Enable SSR (Server-Side Rendering)? → A: Yes, use `--ssr` flag
+- Q: How to handle commits per task given auto-commit hooks are disabled? → A: The implementing agent performs `git add . && git commit -m "Txxx: description (closes #N)"` after each individual task implementation is verified (this satisfies Constitution §6 commit-per-task). Then closes the corresponding GitHub issue via the GitHub MCP with the commit SHA in the body (Constitution §7). Auto-commit hooks in `git-config.yml` remain disabled because they fire per-command (not per-task) and cannot reference individual issue numbers. Each T in tasks.md maps 1:1 to a GitHub issue number.
 
 ## Dependencies
 
