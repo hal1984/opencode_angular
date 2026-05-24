@@ -1,10 +1,13 @@
 <!--
   Sync Impact Report
 
-  Version change: 1.7.1 → 1.8.0 (MINOR: replaced Development Workflow with strict per-task execution cycle)
+  Version change: 1.8.0 → 1.8.1 (PATCH: strengthened E2E enforcement — failures mean incorrect implementation, MUST fix)
   Modified sections:
-    - Development Workflow — replaced loose numbered steps with mandatory 5-step Per-Task Execution Cycle,
-      added Enforcement rules, added Cycle diagram, removed vague "logical unit of work" language
+    - IV. Test-First — added "E2E Failure = Implementation Error" rule; E2E tests MUST pass before feature completion
+    - Development Workflow — added Feature Completion Gate requiring E2E tests as mandatory gate
+    - Enforcement — added E2E failure consequence: agent MUST fix implementation, not skip or defer tests
+  Added sections:
+    - Feature Completion Gate (under Development Workflow)
   Removed sections: N/A
   Templates requiring updates:
     - .specify/templates/plan-template.md — ✅ reviewed, no changes needed
@@ -60,8 +63,16 @@ routing, or inter-component communication.
 
 **E2E tests**: Playwright MUST be used for end-to-end testing. Every
 critical user journey defined in the feature spec MUST have at least
-one E2E test. E2E tests MUST run against a production-like build
-(`ng build` + SSR server) before merging.
+one E2E test. E2E tests MUST be run with `npm run e2e` (which executes
+`npx playwright test`). The dev server (`ng serve`) MUST be running on
+port 4200 before executing E2E tests.
+
+**E2E Failure = Implementation Error (NON-NEGOTIABLE)**: Failing E2E
+tests indicate that the implementation does NOT meet the specification.
+The agent MUST fix the implementation until ALL E2E tests pass. E2E
+failures MUST NOT be skipped, deferred, or treated as acceptable.
+If the E2E test itself is incorrect, it MUST be corrected — but the
+specification is the source of truth, not the implementation.
 
 ### V. TypeScript Strict Mode
 
@@ -301,7 +312,10 @@ without including the SHA.
 - If any step is skipped, the task is NOT complete and the agent
   MUST NOT proceed to the next task.
 - If automated tests fail (Step 2), the agent MUST NOT proceed to
-  Step 3 until the tests pass.
+  Step 3 until the tests pass. This includes unit tests AND E2E tests
+  where applicable.
+- If E2E tests fail, the implementation is incorrect. The agent MUST
+  fix the implementation — not skip, disable, or weaken the tests.
 - If the commit (Step 4) contains more than one task, the commit is
   invalid — the agent MUST reset and recommit per-task.
 - If the issue (Step 5) is closed without the SHA, the issue closure
@@ -331,6 +345,33 @@ Close issue (with SHA)
 [Proceed to NEXT task]
 ```
 
+### Feature Completion Gate (NON-NEGOTIABLE)
+
+Before a feature is considered complete, the following MUST pass:
+
+1. **All unit tests pass** — `ng test` with zero failures.
+2. **All E2E tests pass** — `npm run e2e` with zero failures, against a
+   running `ng serve` instance on port 4200.
+3. **Production build succeeds** — `ng build` with zero TypeScript errors,
+   SSR output generated.
+
+If ANY E2E test fails, the implementation is incorrect and MUST be
+fixed. The agent MUST NOT declare a feature complete with failing E2E
+tests. The specification defines expected behavior — E2E tests validate
+that behavior end-to-end. A mismatch means the implementation is wrong.
+
+### Enforcement (E2E)
+
+- If E2E tests fail, the agent MUST diagnose and fix the implementation
+  issue before proceeding.
+- The agent MUST NOT skip E2E tests, comment them out, or lower
+  assertions to make them pass.
+- If a legitimate spec change is needed, the spec MUST be updated first
+  via `/speckit.specify`, then E2E tests updated, then implementation
+  adjusted.
+- E2E test results MUST be documented in the task completion (Step 5
+  issue body) when applicable.
+
 ## Governance
 
 This constitution supersedes any ad-hoc practices. Amendments require:
@@ -343,4 +384,4 @@ All pull requests and reviews MUST verify compliance with these principles.
 Violations MUST be documented in the Constitution Check section of
 `plan.md` with a written justification and rejected simpler alternative.
 
-**Version**: 1.8.0 | **Ratified**: 2026-05-24 | **Last Amended**: 2026-05-24
+**Version**: 1.8.1 | **Ratified**: 2026-05-24 | **Last Amended**: 2026-05-24

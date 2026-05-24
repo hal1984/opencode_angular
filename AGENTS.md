@@ -34,7 +34,7 @@ Angular v21.2 app scaffolded with Clean Architecture layers in `src/app/`. Layer
 ## Testing
 
 - **Unit**: Vitest via `ng test`. One command runs everything. Coverage thresholds enforced at 80% line/branch/function/statements in `vitest-base.config.ts`.
-- **E2E**: Playwright in `e2e/`. Tests run against `http://127.0.0.1:4200`. Requires dev server running. Includes AXE accessibility checks (`@axe-core/playwright`).
+- **E2E**: Playwright in `e2e/`. Run with `npm run e2e`. Requires `ng serve` running on port 4200. **NON-NEGOTIABLE**: E2E test failures mean the implementation is incorrect — the implementation MUST be fixed, not the tests weakened. Includes AXE accessibility checks (`@axe-core/playwright`).
 - **Per-task verification**: After every task, run `ng test` then use Playwright MCP for manual browser verification. Screenshots go to `test-screenshots/` (gitignored).
 
 ## Architecture layers
