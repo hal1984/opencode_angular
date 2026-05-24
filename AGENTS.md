@@ -4,44 +4,50 @@
 
 Tooling infrastructure is provisioned but no Angular app code exists yet. No `src/`, no project `package.json` at root.
 
-## Squad (agent orchestration)
+## Scaffolding
 
-- `.squad/team.md` — roster with Ralph (work monitor) and Scribe (logger) agents initialized; domain agents need hiring via Squad's Init Mode.
-- `.squad/routing.md`, `.squad/ceremonies.md`, `.squad/decisions.md`, `.squad/identity/` — operational config.
-- `.squad/config.json` — `{ "version": 1 }` (no model overrides set).
-- `.squad/casting/policy.json` — allowed casting universes and capacities.
+Run `ng new <name> --standalone --routing --style=scss` when initializing the app. Use the `angular-new-app` skill before scaffolding (it contains guidelines for modern Angular setup).
 
-## Angular skills (installed)
+## Skills (installed)
 
-`skills-lock.json` references two skills from `angular/skills`:
-- `angular-new-app` — use to scaffold with `ng new` (triggers on project creation)
-- `angular-developer` — use for Angular code generation, architecture, forms, routing, signals, etc.
+`skills-lock.json` pins two skills from `angular/skills`:
+- `angular-developer` — use for Angular code generation, architecture, forms, routing, signals, SSR, testing, etc.
+- `angular-new-app` — use before `ng new` scaffolding
 
-Run `ng new <name> --standalone --routing --style=scss` when initializing the app.
+Skills live in `.agents/skills/`. OpenCode loads them via `opencode.json` `skills.paths`.
 
-## Speckit workflow commands
+## MCP servers (opencode.json)
 
-Commands live in `.opencode/commands/` and are invoked via `speckit.<verb>`:
-- `speckit.specify` — create a feature spec
-- `speckit.plan` — create an implementation plan
-- `speckit.tasks` — break plan into tasks
-- `speckit.implement` — execute tasks
-- `speckit.checklist` — generate checklist
-- `speckit.clarify` — ask clarifying questions
-- `speckit.constitution` — project constitution
-- `speckit.analyze` — analyze existing code
-- `speckit.git.*` — git workflow helpers
+| Server | Type | Auth |
+|--------|------|------|
+| GitHub | remote (api.githubcopilot.com) | Bearer token from `.secrets/github-token` |
+| Angular CLI | local (`npx -y @angular/cli@latest mcp`) | none |
+| Context7 | remote (mcp.context7.com) | `CONTEXT7_API_KEY` from `.secrets/context7-key` |
 
-## Copilot skills
+Tokens are gitignored (`.secrets/`). If an MCP call fails, check that the corresponding secret file exists and is non-empty.
 
-`.copilot/skills/` contains: agent-collaboration, error-recovery, git-workflow, reviewer-protocol, secret-handling, session-recovery, squad-conventions, test-discipline.
+## Speckit workflow (`.opencode/commands/`)
 
-## MCP
+Commands invoked via `speckit.<verb>`. The full SDD cycle:
+```
+speckit.specify → speckit.plan → speckit.tasks → speckit.implement
+```
+Additional helpers: `speckit.analyze`, `speckit.clarify`, `speckit.checklist`, `speckit.constitution`, `speckit.taskstoissues`, `speckit.git.*`.
 
-`.copilot/mcp-config.json` has a GitHub MCP server entry (requires `GITHUB_TOKEN` env var).
+The workflow is defined in `.specify/workflows/speckit/workflow.yml` and expects `speckit_version >=0.8.5` (initialized at 0.8.13).
 
-## Key config references
+## Important paths / config
 
-- `.specify/init-options.json`: `context_file: AGENTS.md` — this file is the designated context source.
-- `.gitattributes`: `merge=union` for `.squad/*` append-only files.
-- No `opencode.json` found — agent behavior is guided by Squad agent (`squad.agent.md`) and this file.
+- `opencode.json` — central agent config (instructions, skills, MCP). This is the agent's primary entry point.
+- `.specify/init-options.json` — `context_file: AGENTS.md` — this file is the designated context source.
+- `.opencode/package.json` — depends on `@opencode-ai/plugin@1.15.10`.
+
+## Secrets
+
+- `.secrets/github-token` — required for GitHub MCP server
+- `.secrets/context7-key` — required for Context7 MCP server
+- Both are in `.gitignore` and must exist locally for their respective MCP servers to work.
+
+## Deleted directories (no longer present)
+
+`.squad/` and `.copilot/` directories have been removed. Ignore any references to squad agents or copilot skills from old docs.
