@@ -40,6 +40,7 @@ testem.log
 /typings
 __screenshots__/
 /playwright-report/
+/.playwright-mcp/
 
 # System files
 .DS_Store
