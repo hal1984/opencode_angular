@@ -6,7 +6,7 @@ Tooling infrastructure is provisioned but no Angular app code exists yet. No `sr
 
 ## Scaffolding
 
-Run `ng new <name> --standalone --routing --style=scss` when initializing the app. Use the `angular-new-app` skill before scaffolding (it contains guidelines for modern Angular setup).
+Run `ng new <name> --standalone --routing --style=tailwind --ssr` when initializing the app. Use the `angular-new-app` skill before scaffolding (it contains guidelines for modern Angular setup).
 
 ## Skills (installed)
 
@@ -51,3 +51,12 @@ The workflow is defined in `.specify/workflows/speckit/workflow.yml` and expects
 ## Deleted directories (no longer present)
 
 `.squad/` and `.copilot/` directories have been removed. Ignore any references to squad agents or copilot skills from old docs.
+
+<!-- SPECKIT START -->
+## Active Spec
+
+**Feature**: Initialize Angular Project
+**Plan**: `specs/001-angular-project-init/plan.md`
+**Spec**: `specs/001-angular-project-init/spec.md`
+**Branch**: `001-angular-project-init`
+<!-- SPECKIT END -->
