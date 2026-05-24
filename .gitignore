@@ -43,6 +43,7 @@ __screenshots__/
 /.playwright-mcp/
 
 # Manual test screenshots
+/test-results/
 /test-screenshots
 
 # System files
