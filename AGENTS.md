@@ -53,10 +53,10 @@ The workflow is defined in `.specify/workflows/speckit/workflow.yml` and expects
 `.squad/` and `.copilot/` directories have been removed. Ignore any references to squad agents or copilot skills from old docs.
 
 <!-- SPECKIT START -->
-## Active Spec
+## Completed Spec
 
 **Feature**: Initialize Angular Project
 **Plan**: `specs/001-angular-project-init/plan.md`
 **Spec**: `specs/001-angular-project-init/spec.md`
-**Branch**: `001-angular-project-init`
+**Branch**: `001-angular-project-init` (merged via PR #50)
 <!-- SPECKIT END -->
