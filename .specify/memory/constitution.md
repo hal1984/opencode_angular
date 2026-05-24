@@ -1,10 +1,10 @@
 <!--
   Sync Impact Report
 
-  Version change: 1.2.0 → 1.3.0 (MINOR: material expansion of Clean Architecture principle)
+  Version change: 1.5.0 → 1.6.0 (MINOR: expanded VIII with concrete Angular best practices from MCP)
   Modified principles:
-    - VII. Clean Architecture — expanded with NgRx SignalStore layer model,
-      directory convention, dependency rules, and layer-specific testing
+    - VIII. Angular CLI Best Practices — expanded with specific component,
+      template, signal, service, and accessibility rules from Angular MCP
   Added sections: N/A
   Removed sections: N/A
   Templates requiring updates:
@@ -22,7 +22,7 @@
 ### I. Scaffolding-First
 
 All project initialization MUST begin with `ng new` using the Angular CLI.
-Use `--standalone --routing --style=scss` flags. The `angular-new-app` skill
+Use `--standalone --routing --style=tailwind --ssr` flags. The `angular-new-app` skill
 MUST be loaded before scaffolding to ensure modern Angular defaults. No
 hand-written project wiring, no manual `package.json` at root, no
 bypassing the CLI generator.
@@ -49,8 +49,20 @@ detection for internal state flow.
 Tests MUST be written and observed to fail before implementation code is
 written. Every component, service, directive, and pipe MUST have at least
 one test covering its primary behavior. Vitest MUST be used as the
-testing framework. Integration tests MUST be added for any feature
-involving HTTP, routing, or inter-component communication.
+unit testing framework.
+
+**Unit test coverage**: Minimum 80% line coverage, 80% branch coverage,
+and 80% function coverage MUST be maintained. Coverage thresholds MUST be
+enforced in the Vitest configuration. Coverage reports MUST pass before
+code is merged.
+
+**Integration tests**: MUST be added for any feature involving HTTP,
+routing, or inter-component communication.
+
+**E2E tests**: Playwright MUST be used for end-to-end testing. Every
+critical user journey defined in the feature spec MUST have at least
+one E2E test. E2E tests MUST run against a production-like build
+(`ng build` + SSR server) before merging.
 
 ### V. TypeScript Strict Mode
 
@@ -188,16 +200,48 @@ generators (`ng generate`) MUST be preferred over hand-crafted files.
 The repo's Angular version MUST be checked at plan time so version-
 specific best practices are followed.
 
+The following rules from the Angular best practices guide MUST be
+enforced in all application code:
+
+**Component & template rules:**
+- Do NOT set `standalone: true` inside decorators — it is the
+  default in Angular v20+
+- Use `input()` and `output()` functions, NOT decorators
+- Set `changeDetection: ChangeDetectionStrategy.OnPush` in every
+  component
+- Do NOT use `@HostBinding` or `@HostListener` — use the `host`
+  object in `@Component`/`@Directive` decorator instead
+- Do NOT use `ngClass` or `ngStyle` — use `[class]` and
+  `[style]` bindings instead
+- Use native control flow: `@if`, `@for`, `@switch` — never
+  `*ngIf`, `*ngFor`, `*ngSwitch`
+- Use `NgOptimizedImage` for all static images
+- Prefer Reactive Forms over Template-driven Forms
+
+**Signal rules:**
+- Do NOT use `mutate` on signals — use `update` or `set` instead
+- Use `computed()` for derived state
+
+**Service rules:**
+- Use `inject()` function, NOT constructor injection
+- Use `providedIn: 'root'` for singleton services
+
+**Accessibility rules:**
+- All components MUST pass AXE checks
+- All UI MUST follow WCAG AA minimums: focus management, color
+  contrast, ARIA attributes
+
 ## Technology Stack & Constraints
 
 - **Documentation Language**: English (all specs, plans, tasks, comments)
 - **Framework**: Angular (latest stable, installed via Angular CLI)
 - **Language**: TypeScript with strict mode enabled
-- **Styling**: SCSS (component-scoped styles)
+- **Styling**: Tailwind CSS (utility-first, configured via `--style=tailwind`)
 - **State Management**: NgRx SignalStore (`@ngrx/signals`)
 - **Architecture**: Clean Architecture (Domain/Application/Infrastructure/
   Presentation), standalone components, signals-first, routing
-- **Testing**: Vitest (via Angular builder integration)
+- **Testing**: Vitest (unit + integration), Playwright (E2E), min 80%
+  line/branch/function coverage enforced
 - **Project State**: Pre-scaffolding — no `src/` or root `package.json`
 - **CLI Tooling**: Angular CLI via local MCP server
 - **SDD Workflow**: Speckit — `specify → plan → tasks → implement`
@@ -214,6 +258,10 @@ All feature development MUST follow the Speckit SDD cycle:
 2. `speckit.plan` — create implementation plan with technical research
 3. `speckit.tasks` — break plan into sequenced, independently testable tasks
 4. `speckit.implement` — execute tasks in order (tests before code)
+5. **Manual Playwright MCP test** — after implementation, a manual
+   verification MUST be performed using the Playwright MCP tools
+   (browser navigation, snapshots, screenshots) to validate the
+   feature's critical user journeys against the running application.
 
 Feature branches MUST be created via `speckit.git.feature`. Commits
 MUST be made with `speckit.git.commit` after each logical unit of work.
@@ -232,4 +280,4 @@ All pull requests and reviews MUST verify compliance with these principles.
 Violations MUST be documented in the Constitution Check section of
 `plan.md` with a written justification and rejected simpler alternative.
 
-**Version**: 1.3.0 | **Ratified**: 2026-05-24 | **Last Amended**: 2026-05-24
+**Version**: 1.6.0 | **Ratified**: 2026-05-24 | **Last Amended**: 2026-05-24
