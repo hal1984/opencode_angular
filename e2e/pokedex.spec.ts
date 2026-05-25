@@ -101,4 +101,83 @@ test.describe('Pokedex User Journey', () => {
     const retryButton = page.locator('button:has-text("Retry")');
     await expect(retryButton).toBeVisible();
   });
+
+  test('US4: Click Pokemon card navigates to detail page', async ({ page }) => {
+    await page.goto('http://127.0.0.1:4200/pokedex');
+
+    // Wait for cards to load
+    const cards = page.locator('app-pokemon-card');
+    await expect(cards.first()).toBeVisible({ timeout: 5000 });
+
+    // Click first Pokemon card
+    const startTime = Date.now();
+    await cards.first().click();
+
+    // Verify URL changes to /pokedex/{id}
+    await expect(page).toHaveURL(/.*\/pokedex\/\d+/);
+
+    // Verify detail page shows Pokemon info
+    const heading = page.locator('h1');
+    await expect(heading).toBeVisible();
+
+    // SC-001: Page transition should be under 2 seconds
+    const transitionTime = Date.now() - startTime;
+    expect(transitionTime).toBeLessThan(2000);
+  });
+
+  test('US5: Back button returns to Pokedex list from detail page', async ({ page }) => {
+    await page.goto('http://127.0.0.1:4200/pokedex');
+
+    // Wait for cards and click first
+    const cards = page.locator('app-pokemon-card');
+    await expect(cards.first()).toBeVisible({ timeout: 5000 });
+    await cards.first().click();
+
+    // Wait for detail page to load
+    await expect(page.locator('h1')).toBeVisible({ timeout: 5000 });
+
+    // Click back button
+    const backButton = page.locator('button:has-text("Back to Pokedex")');
+    await expect(backButton).toBeVisible();
+    await backButton.click();
+
+    // Verify return to pokedex list
+    await expect(page).toHaveURL(/.*\/pokedex$/);
+    await expect(page.locator('h1:has-text("Pokedex")')).toBeVisible();
+  });
+
+  test('US6: Direct URL navigation to Pokemon detail works', async ({ page }) => {
+    await page.goto('http://127.0.0.1:4200/pokedex/25');
+
+    // Verify detail page loads with Pokemon data
+    const heading = page.locator('h1');
+    await expect(heading).toBeVisible();
+    await expect(heading).toHaveText(/pikachu/i);
+
+    // Verify detail data is displayed
+    await expect(page.locator('text=Height')).toBeVisible();
+    await expect(page.locator('text=Weight')).toBeVisible();
+  });
+
+  test('US7: Invalid Pokemon ID shows not found state', async ({ page }) => {
+    await page.goto('http://127.0.0.1:4200/pokedex/999999');
+
+    // Verify not found message
+    await expect(page.locator('text=Pokemon not found')).toBeVisible();
+    await expect(page.locator('text=Back to Pokedex')).toBeVisible();
+  });
+
+  test('US8: API error on detail page shows error and retry', async ({ page }) => {
+    // Intercept PokeAPI detail endpoint
+    await page.route('**/pokeapi.co/api/v2/pokemon/25', route => route.fulfill({
+      status: 500,
+      body: 'Internal Server Error'
+    }));
+
+    await page.goto('http://127.0.0.1:4200/pokedex/25');
+
+    // Verify error state with retry
+    const retryButton = page.locator('button:has-text("Retry")');
+    await expect(retryButton).toBeVisible({ timeout: 5000 });
+  });
 });
