@@ -12,7 +12,8 @@ describe('PokedexStore', () => {
       count: 1281,
       next: 'https://pokeapi.co/api/v2/pokemon?offset=20&limit=20',
       previous: null
-    } as PokemonListResponse)
+    } as PokemonListResponse),
+    getPokemonById: vi.fn()
   };
 
   beforeEach(async () => {
@@ -50,7 +51,8 @@ describe('PokedexStore', () => {
 
   it('should handle load failure', async () => {
     const errorRepository: IPokemonRepository = {
-      getPokemonList: vi.fn().mockRejectedValue(new Error('Network error'))
+      getPokemonList: vi.fn().mockRejectedValue(new Error('Network error')),
+      getPokemonById: vi.fn()
     };
 
     TestBed.resetTestingModule();
@@ -85,7 +87,8 @@ describe('PokedexStore', () => {
           count: 2,
           next: null,
           previous: null
-        } as PokemonListResponse)
+        } as PokemonListResponse),
+      getPokemonById: vi.fn()
     };
 
     TestBed.resetTestingModule();
@@ -121,7 +124,8 @@ describe('PokedexStore', () => {
           next: null,
           previous: null
         }), 100))
-      )
+      ),
+      getPokemonById: vi.fn()
     };
 
     TestBed.resetTestingModule();
