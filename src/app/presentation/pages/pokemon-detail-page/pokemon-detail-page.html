@@ -1,0 +1,96 @@
+<div class="p-4">
+  <button type="button" routerLink="/pokedex" class="mb-4 px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 transition-colors">
+    &larr; Back to Pokedex
+  </button>
+
+  @if (store.isLoading()) {
+    <p role="status" class="text-center py-8 text-gray-600">Loading Pokemon...</p>
+  }
+
+  @if (store.error(); as errorMsg) {
+    @if (errorMsg.toLowerCase().includes('not found')) {
+      <div role="alert" class="text-center py-8">
+        <h2 class="text-2xl font-bold mb-2">Pokemon not found</h2>
+        <p class="text-gray-600 mb-4">The Pokemon you're looking for doesn't exist.</p>
+        <a routerLink="/pokedex" class="text-blue-500 underline">Back to Pokedex</a>
+      </div>
+    } @else {
+      <div role="alert" class="text-center py-8">
+        <p class="text-red-600 mb-4">{{ errorMsg }}</p>
+        <button
+          type="button"
+          (click)="store.loadPokemonById(store.currentId() ?? id())"
+          class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+        >
+          Retry
+        </button>
+      </div>
+    }
+  }
+
+  @if (store.pokemon(); as pokemon) {
+    <div class="max-w-2xl mx-auto">
+      <h1 class="text-3xl font-bold capitalize mb-4">{{ pokemon.name }}</h1>
+
+      <div class="flex justify-center mb-6">
+        <div [class.fallback-placeholder]="imageError()" class="relative">
+          <img
+            [ngSrc]="pokemon.spriteUrl"
+            [alt]="pokemon.name"
+            width="200"
+            height="200"
+            (error)="onImageError()"
+            [class.opacity-0]="imageError()"
+            priority
+          />
+        </div>
+      </div>
+
+      <div class="mb-6">
+        <h2 class="text-xl font-semibold mb-2">Details</h2>
+        <p><strong>Height:</strong> {{ pokemon.height }} m</p>
+        <p><strong>Weight:</strong> {{ pokemon.weight }} kg</p>
+      </div>
+
+      <div class="mb-6">
+        <h2 class="text-xl font-semibold mb-2">Types</h2>
+        <div class="flex gap-2">
+          @for (type of pokemon.types; track type.slot) {
+            <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full capitalize text-sm">
+              {{ type.name }}
+            </span>
+          }
+        </div>
+      </div>
+
+      @if (pokemon.abilities.length > 0) {
+        <div class="mb-6">
+          <h2 class="text-xl font-semibold mb-2">Abilities</h2>
+          <ul class="list-disc list-inside">
+            @for (ability of pokemon.abilities; track ability.name) {
+              <li class="capitalize">{{ ability.name }}</li>
+            }
+          </ul>
+        </div>
+      }
+
+      <div class="mb-6">
+        <h2 class="text-xl font-semibold mb-2">Base Stats</h2>
+        <div class="space-y-2">
+          @for (stat of pokemon.stats; track stat.name) {
+            <div class="flex items-center gap-2">
+              <span class="w-32 capitalize text-sm font-medium">{{ stat.name }}</span>
+              <span class="w-8 text-right text-sm">{{ stat.baseStat }}</span>
+              <div class="flex-1 bg-gray-200 rounded-full h-2">
+                <div
+                  class="bg-blue-500 rounded-full h-2 transition-all"
+                  [style.width.%]="Math.min(stat.baseStat / 200 * 100, 100)"
+                ></div>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  }
+</div>
