@@ -41,14 +41,14 @@ description: "Task list for Pokemon Detail Navigation feature implementation"
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete.
 
-- [ ] T001 Create PokemonDetail, PokemonType, PokemonAbility, PokemonStat domain entities in src/app/domain/models/pokemon.model.ts
-- [ ] T002 Add getPokemonById method to IPokemonRepository interface in src/app/domain/repositories/pokemon.repository.ts
-- [ ] T003 [P] Implement getPokemonById in PokeapiDataSource with DTO mapping in src/app/infrastructure/data-sources/pokeapi.datasource.ts
-- [ ] T004 [P] Write unit tests for getPokemonById in src/app/infrastructure/data-sources/pokeapi.datasource.spec.ts
-- [ ] T005 Create PokemonDetailStore (SignalStore) in src/app/application/stores/pokemon-detail.store.ts
-- [ ] T006 [P] Write unit tests for PokemonDetailStore in src/app/application/stores/pokemon-detail.store.spec.ts
-- [ ] T007 Enable withComponentInputBinding and withInMemoryScrolling in src/app/presentation/app.config.ts
-- [ ] T008 Add prerender entry for pokedex/:id in src/app/presentation/app.routes.server.ts
+- [x] T001 Create PokemonDetail, PokemonType, PokemonAbility, PokemonStat domain entities in src/app/domain/models/pokemon.model.ts
+- [x] T002 Add getPokemonById method to IPokemonRepository interface in src/app/domain/repositories/pokemon.repository.ts
+- [x] T003 [P] Implement getPokemonById in PokeapiDataSource with DTO mapping in src/app/infrastructure/data-sources/pokeapi.datasource.ts
+- [x] T004 [P] Write unit tests for getPokemonById in src/app/infrastructure/data-sources/pokeapi.datasource.spec.ts
+- [x] T005 Create PokemonDetailStore (SignalStore) in src/app/application/stores/pokemon-detail.store.ts
+- [x] T006 [P] Write unit tests for PokemonDetailStore in src/app/application/stores/pokemon-detail.store.spec.ts
+- [x] T007 Enable withComponentInputBinding and withInMemoryScrolling in src/app/presentation/app.config.ts
+- [x] T008 Add prerender entry for pokedex/:id in src/app/presentation/app.routes.server.ts
 
 **Checkpoint**: Foundation ready — all layers from domain through application config support Pokemon detail fetching. User story implementation can now begin.
 
@@ -62,12 +62,12 @@ description: "Task list for Pokemon Detail Navigation feature implementation"
 
 ### Implementation for User Story 1
 
-- [ ] T009 Add pokedex/:id route (lazy, sibling) in src/app/presentation/app.routes.ts
-- [ ] T010 Create PokemonDetailPage component shell with id input binding in src/app/presentation/pages/pokemon-detail-page/pokemon-detail-page.ts
-- [ ] T011 Write unit tests for PokemonDetailPage creation and id binding in src/app/presentation/pages/pokemon-detail-page/pokemon-detail-page.spec.ts
-- [ ] T012 Add routerLink input to PokemonCard component in src/app/presentation/components/pokemon-card/pokemon-card.ts
-- [ ] T013 Add routerLink to each Pokemon card in src/app/presentation/pages/pokedex-page/pokedex-page.html
-- [ ] T014 Implement PokemonDetailPage template with name, image, and loading state in src/app/presentation/pages/pokemon-detail-page/pokemon-detail-page.html
+- [x] T009 Add pokedex/:id route (lazy, sibling) in src/app/presentation/app.routes.ts
+- [x] T010 Create PokemonDetailPage component shell with id input binding in src/app/presentation/pages/pokemon-detail-page/pokemon-detail-page.ts
+- [x] T011 Write unit tests for PokemonDetailPage creation and id binding in src/app/presentation/pages/pokemon-detail-page/pokemon-detail-page.spec.ts
+- [x] T012 Add routerLink input to PokemonCard component in src/app/presentation/components/pokemon-card/pokemon-card.ts
+- [x] T013 Add routerLink to each Pokemon card in src/app/presentation/pages/pokedex-page/pokedex-page.html
+- [x] T014 Implement PokemonDetailPage template with name, image, and loading state in src/app/presentation/pages/pokemon-detail-page/pokemon-detail-page.html
 
 **Checkpoint**: At this point, User Story 1 should be fully functional. User can click any Pokemon card, navigate to its detail page, and see the Pokemon's name, image, and loading indicator.
 
@@ -81,10 +81,10 @@ description: "Task list for Pokemon Detail Navigation feature implementation"
 
 ### Implementation for User Story 2
 
-- [ ] T015 [P] [US2] Add detail content section to PokemonDetailPage template showing types, height, weight, abilities, and stats in src/app/presentation/pages/pokemon-detail-page/pokemon-detail-page.html
-- [ ] T016 [US2] Wire PokemonDetailStore's loadPokemonById to the PokemonDetailPage onInit and display loaded detail data in src/app/presentation/pages/pokemon-detail-page/pokemon-detail-page.ts
-- [ ] T017 [US2] Add error state and retry button to PokemonDetailPage template in src/app/presentation/pages/pokemon-detail-page/pokemon-detail-page.html
-- [ ] T018 [US2] Add image error fallback on detail page (reuse placeholder pattern from PokemonCard) in src/app/presentation/pages/pokemon-detail-page/pokemon-detail-page.ts
+- [x] T015 [P] [US2] Add detail content section to PokemonDetailPage template showing types, height, weight, abilities, and stats in src/app/presentation/pages/pokemon-detail-page/pokemon-detail-page.html
+- [x] T016 [US2] Wire PokemonDetailStore's loadPokemonById to the PokemonDetailPage onInit and display loaded detail data in src/app/presentation/pages/pokemon-detail-page/pokemon-detail-page.ts
+- [x] T017 [US2] Add error state and retry button to PokemonDetailPage template in src/app/presentation/pages/pokemon-detail-page/pokemon-detail-page.html
+- [x] T018 [US2] Add image error fallback on detail page (reuse placeholder pattern from PokemonCard) in src/app/presentation/pages/pokemon-detail-page/pokemon-detail-page.ts
 
 **Checkpoint**: At this point, User Story 2 is functional. Pokemon detail page shows all the rich information (types, stats, abilities, physical characteristics) with loading and error states.
 
@@ -98,9 +98,9 @@ description: "Task list for Pokemon Detail Navigation feature implementation"
 
 ### Implementation for User Story 3
 
-- [ ] T019 [US3] Add back button (routerLink="/pokedex") to PokemonDetailPage template in src/app/presentation/pages/pokemon-detail-page/pokemon-detail-page.html
-- [ ] T020 [US3] Handle invalid Pokemon ID (404 from API) by displaying "Pokemon not found" message in src/app/presentation/pages/pokemon-detail-page/pokemon-detail-page.html
-- [ ] T021 [US3] Write unit test for invalid ID scenario in src/app/presentation/pages/pokemon-detail-page/pokemon-detail-page.spec.ts
+- [x] T019 [US3] Add back button (routerLink="/pokedex") to PokemonDetailPage template in src/app/presentation/pages/pokemon-detail-page/pokemon-detail-page.html
+- [x] T020 [US3] Handle invalid Pokemon ID (404 from API) by displaying "Pokemon not found" message in src/app/presentation/pages/pokemon-detail-page/pokemon-detail-page.html
+- [x] T021 [US3] Write unit test for invalid ID scenario in src/app/presentation/pages/pokemon-detail-page/pokemon-detail-page.spec.ts
 
 **Checkpoint**: At this point, User Story 3 is functional. Users can navigate back to the list, and invalid IDs are handled gracefully.
 
