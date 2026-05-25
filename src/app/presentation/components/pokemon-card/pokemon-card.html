@@ -1,13 +1,29 @@
-<article class="w-full rounded-lg border p-4 shadow-sm">
-  <div [class.fallback-placeholder]="imageError()" class="relative">
-    <img
-      [ngSrc]="pokemon().spriteUrl"
-      [alt]="pokemon().name"
-      width="96"
-      height="96"
-      (error)="onImageError()"
-      [class.opacity-0]="imageError()"
-    />
-  </div>
-  <p class="capitalize">{{ pokemon().name }}</p>
-</article>
+@if (routerLink(); as link) {
+  <a [routerLink]="link" class="block rounded-lg border p-4 shadow-sm hover:shadow-md transition-shadow">
+    <div [class.fallback-placeholder]="imageError()" class="relative">
+      <img
+        [ngSrc]="pokemon().spriteUrl"
+        [alt]="pokemon().name"
+        width="96"
+        height="96"
+        (error)="onImageError()"
+        [class.opacity-0]="imageError()"
+      />
+    </div>
+    <p class="capitalize mt-2">{{ pokemon().name }}</p>
+  </a>
+} @else {
+  <article class="w-full rounded-lg border p-4 shadow-sm">
+    <div [class.fallback-placeholder]="imageError()" class="relative">
+      <img
+        [ngSrc]="pokemon().spriteUrl"
+        [alt]="pokemon().name"
+        width="96"
+        height="96"
+        (error)="onImageError()"
+        [class.opacity-0]="imageError()"
+      />
+    </div>
+    <p class="capitalize mt-2">{{ pokemon().name }}</p>
+  </article>
+}

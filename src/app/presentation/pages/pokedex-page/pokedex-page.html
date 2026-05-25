@@ -12,7 +12,7 @@
 @if (store.pokemon().length > 0) {
   <section class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
     @for (mon of store.pokemon(); track mon.id) {
-      <app-pokemon-card [pokemon]="mon" />
+      <app-pokemon-card [pokemon]="mon" [routerLink]="['/pokedex', mon.id]" />
     }
   </section>
 

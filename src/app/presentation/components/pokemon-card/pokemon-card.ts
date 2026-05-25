@@ -1,11 +1,12 @@
 import { Component, input, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { NgOptimizedImage } from '@angular/common';
 import { Pokemon } from '../../../domain/models/pokemon.model';
 
 @Component({
   selector: 'app-pokemon-card',
   templateUrl: './pokemon-card.html',
-  imports: [NgOptimizedImage],
+  imports: [NgOptimizedImage, RouterLink],
   styles: [`
     .fallback-placeholder {
       background-color: #e5e7eb;
@@ -24,6 +25,7 @@ import { Pokemon } from '../../../domain/models/pokemon.model';
 })
 export class PokemonCard {
   pokemon = input.required<Pokemon>();
+  routerLink = input<string | any[] | null>(null);
   imageError = signal(false);
 
   onImageError() {

@@ -14,7 +14,8 @@ describe('PokedexPage Integration', () => {
       count: 0,
       next: null,
       previous: null
-    })
+    }),
+    getPokemonById: vi.fn()
   };
 
   beforeEach(async () => {
