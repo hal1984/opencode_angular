@@ -17,7 +17,11 @@
 
 Angular v21.2 app scaffolded with Clean Architecture layers in `src/app/`. Layer directories exist but most are empty — only `application/stores/counter.store.ts` and `presentation/` root files are populated.
 
-**Active feature**: `002-pokedex-page` (`.specify/feature.json` → `specs/002-pokedex-page/`)
+**Active feature**: `003-pokemon-detail-navigation` (`.specify/feature.json` → `specs/003-pokemon-detail-navigation/`)
+
+<!-- SPECKIT START -->
+**Plan**: `specs/003-pokemon-detail-navigation/plan.md`
+<!-- SPECKIT END -->
 
 ## Commands
 
